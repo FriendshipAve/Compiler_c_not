@@ -1,0 +1,11 @@
+This directory contains the files defining the link-time and run-time
+environment for your generated assembly files.  The autograder uses
+(almost) identical runtime files to grade your code upon hand-in.
+
+The driver can link the runtime with your generated
+<file>.s, using the command
+
+% gcc -m64 <file>.s ../runtime/run411.c
+
+to generate the executable a.out, which it will then run and
+test for the correct answer.

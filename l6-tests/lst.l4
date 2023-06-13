@@ -1,0 +1,47 @@
+//test return 15411
+enum Lst = Cons(int, enum Lst) | Nil;
+
+enum Lst append(enum Lst l1, enum Lst l2) {
+  match l1 {
+    Lst::Nil => {
+      return l2;
+    }
+    Lst::Cons(n, tail) => {
+      return Lst::Cons(n, append(tail, l2));
+    }
+  }
+  
+}
+
+enum Lst rev(enum Lst l) {
+  match l {
+    Lst::Cons(n, Lst::Nil) => {
+      return Lst::Cons(n, Lst::Nil);
+    }
+    Lst::Cons(n, Lst::Cons(m, l1)) => {
+      return append(rev(l1), Lst::Cons(m, Lst::Cons(n, Lst::Nil)));
+    }
+    Lst::Nil => {
+      return l;
+    }
+  }
+}
+
+int digits(enum Lst l) {
+  match rev(l) {
+    Lst::Cons(n, Lst::Nil) => {
+      return n;
+    }
+    Lst::Cons(n, tail) => {
+      return n + 10 * digits(rev(tail));
+    }
+    _ => {
+      return -1;
+    }
+  }
+}
+
+int main() {
+  enum Lst l = Lst::Cons(1, Lst::Cons(5, Lst::Cons(4, Lst::Cons(1, Lst::Cons(1, Lst::Nil)))));
+  return digits(l);
+}

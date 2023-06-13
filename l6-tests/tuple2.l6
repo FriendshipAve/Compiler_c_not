@@ -1,0 +1,13 @@
+//test error
+// cannot redefine another variable in match stmt
+enum int_tuple =
+  T(int, int, int);
+
+int main(){
+  enum int_tuple a = int_tuple::T(1,2,3);
+  match a{
+    int_tuple::T(a, c, d) => {
+      return a;
+    }
+  }
+}

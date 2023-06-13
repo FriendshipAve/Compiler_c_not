@@ -1,0 +1,46 @@
+//test return 10425
+//
+enum Tree = Node(enum Tree, int, enum Tree) | Leaf;
+
+enum Tree invert(enum Tree t) {
+  match t {
+    Tree::Leaf => {
+      return t;
+    }
+    Tree::Node(t1, n, t2) => {
+      return Tree::Node(invert(t2), n, invert(t1));
+    }
+  }
+}
+
+int leftmost(enum Tree t) {
+  match t {
+    Tree::Leaf => {
+      return -1;
+    }
+    Tree::Node(Tree::Leaf, n, _) => {
+      return n;
+    }
+    Tree::Node(t1, _, _) => {
+      return leftmost(t1);
+    }
+  }
+}
+
+int main() {
+  enum Tree t = Tree::Node(
+    Tree::Node(
+      Tree::Node(Tree::Leaf,15411,Tree::Leaf),
+      15451,
+      Tree::Node(Tree::Leaf,15251,Tree::Leaf)
+    ),
+    21737,
+    Tree::Node(
+      Tree::Node(Tree::Leaf,21301,Tree::Leaf),
+      21269,
+      Tree::Node(Tree::Leaf,10425,Tree::Leaf)
+    )
+  );
+
+  return leftmost(invert(t));
+}

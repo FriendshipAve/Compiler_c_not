@@ -1,0 +1,47 @@
+//test return 6
+//tests how enum fits into a struct
+
+enum List = Node(int, enum List) | End;
+
+struct Lists {
+  enum List l1;
+  enum List l2;
+};
+
+typedef struct Lists* bundle;
+
+int max(int x, int y) {
+  if (x >= y) {
+    return x;
+  }
+  return y;
+}
+
+int min(int x, int y) {
+  if (x <= y) {
+    return x;
+  }
+  return y;
+}
+
+int max_list(enum List l) {
+  match l {
+    List::End => {
+      return 0;
+    }
+    List::Node(n, tail) => {
+      return max(n, max_list(tail));
+    }
+  }
+}
+
+int minimax(bundle b) {
+  return min(max_list(b->l1), max_list(b->l2));
+}
+
+int main() {
+  bundle b = alloc(struct Lists);
+  b->l1 = List::Node(3, List::Node(9, List::End));
+  b->l2 = List::Node(6, List::Node(4, List::End));
+  return minimax(b);
+}

@@ -1,0 +1,16 @@
+//test error
+// return in match stmt is not correct
+enum int_tuple =
+  T(int*, int*, int*);
+
+
+int main(){
+  enum int_tuple a = int_tuple::T(alloc(int),alloc(int),alloc(int));
+  match a{
+    int_tuple::T(b, c, d) => {
+      return b;
+    }
+  }
+
+  return 0;
+}

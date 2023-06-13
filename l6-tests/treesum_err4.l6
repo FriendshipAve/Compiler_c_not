@@ -1,0 +1,36 @@
+//test error
+/* repeated name for treesum*/
+
+enum Tree = Node(enum Tree, int, enum Tree) | Leaf;
+
+int tree_sum(enum Tree t) {
+  match t {
+    Tree::Node(t, n, t) => {
+      return tree_sum(t1) + n + tree_sum(t2);
+    }
+    Tree::Leaf => {
+      return 0;
+    }
+  }
+}
+
+int test1() {
+  enum Tree x = Tree::Node(
+    Tree::Node(
+      Tree::Node(
+        Tree::Leaf,
+        23,
+        Tree::Leaf
+      ),
+      14,
+      Tree::Leaf
+    ),
+    5,
+    Tree::Node(Tree::Leaf, 8, Tree::Leaf)
+  );
+  return tree_sum(x);
+}
+
+int main() {
+  return test1();
+}

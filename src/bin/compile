@@ -1,0 +1,113 @@
+#!/bin/sh
+
+# Author: Ariel Davis <azdavis@andrew.cmu.edu>
+
+# Use this to compile an actual executable using your compiler.
+# Also supports executing and comparing with the reference output.
+# Modify this if your flags differ from the ones that have been chosen here.
+
+set -eu
+root="$(cd "$(dirname "$0")" && cd "../.." && pwd -P)"
+orig_pwd="$PWD"
+
+usage() {
+cat <<EOF
+usage:
+  $0 [<options>] <file>
+
+options:
+  -h
+    show this help
+  -l <header>
+    use the header <header>
+  -O <opt-level>
+    use the optimization level <opt-level>
+  -r
+    run a reference solution
+  -t
+    stop after typechecking
+  -u
+    be unsafe
+  -v
+    be verbose
+  -x
+    run the executable file
+EOF
+exit 1
+}
+
+panic() {
+  echo "$1"
+  exit 1
+}
+
+header=""
+opt_level="1"
+ref=false
+only_typecheck=false
+safe=true
+verbose=false
+run=false
+while getopts "hl:O:rtuvx" opt; do
+  case "$opt" in
+  (l) header="$OPTARG" ;;
+  (O) opt_level="$OPTARG" ;;
+  (r) ref=true ;;
+  (t) only_typecheck=true ;;
+  (u) safe=false ;;
+  (v) verbose=true ;;
+  (x) run=true ;;
+  (*) usage ;;
+  esac
+done
+shift "$((OPTIND - 1))"
+
+if [ "$#" -ne 1 ]; then
+  usage
+fi
+
+if echo "$1" | grep -q '^/'; then
+  src="$1"
+else
+  src="$orig_pwd/$1"
+fi
+
+cd "$root/compiler"
+if ! cargo build --quiet; then
+  panic "cargo build failed"
+fi
+cd "$orig_pwd"
+
+if "$verbose"; then v="-v"; else v=""; fi
+if "$safe"; then u=""; else u="-u"; fi
+if "$only_typecheck"; then t="-t"; else t=""; fi
+if [ -z "$header" ]; then l=""; else l="-l $header"; fi
+
+export UNAME="$(uname)"
+export RUST_BACKTRACE=1
+if ! "$root/compiler/target/debug/c0c" $v $t $u $l -O "$opt_level" -e x86-64 -- "$src"; then
+  panic "c0c failed"
+elif "$only_typecheck"; then
+  exit
+fi
+
+if ! gcc -m64 -o "$src.exe" "$src.s" "$root/runtime/run411.c"; then
+  panic "gcc failed"
+fi
+
+if "$ref"; then
+  echo "==> ref ans"
+  if [ -z "$header" ]; then
+    cc0 -x -- "$src"
+  elif [ "$header" = "../runtime/15411-l4.h0" ]; then
+    # bit hacky
+    cc0 -x -lfpt -ldub -ralt -- "$src"
+  else
+    cc0 -x -- "$header" "$src"
+  fi
+fi
+
+if "$run"; then
+  echo "==> our ans"
+  "$src.exe"
+fi

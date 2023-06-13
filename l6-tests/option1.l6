@@ -1,0 +1,11 @@
+//test return 10
+enum int_opt =  Some(int) |  None;
+
+int main(){
+  enum int_opt a = int_opt :: Some(10);
+  match a {
+    int_opt ::Some(b) => {return b;}
+    int_opt :: None => {return 0;}
+  }
+
+}
