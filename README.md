@@ -4,6 +4,7 @@ This compiler also supports a special ADT design, as we call it as `L6`.
 
 ## Author
 Tianwei Li
+
 Yicheng Zhang (`zyc`at`cmu.edu`)
 
 ### Version and Dependency
