@@ -2,6 +2,10 @@
 This is a compiler for C0, as specified by the [link](https://c0.cs.cmu.edu/) here.
 This compiler also supports a special ADT design, as we call it as `L6`.
 
+## Author
+Tianwei Li
+Yicheng Zhang (`zyc`at`cmu.edu`)
+
 ### Version and Dependency
 This code was tested against Stable Rust (1.45.2). Other than `serde_json`, which was required only for one checkpoint during development, it has no dependencies other than `std`, which allows it to compile quite quickly. 
 
