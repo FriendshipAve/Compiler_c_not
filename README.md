@@ -1,6 +1,6 @@
 # Compiler for `C-not`, a subset of C
-This is a compiler for C0, as specified by the [link](https://c0.cs.cmu.edu/) here.
-This compiler also supports a special ADT design, as we call it as `L6`.
+This is a compiler for C-not, as specified by the [link](https://c0.cs.cmu.edu/) here.
+This compiler also supports a special ADT design, which we call as `L6`.
 
 ## Author
 Tianwei Li
