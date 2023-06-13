@@ -1,4 +1,4 @@
-# Compiler for C-not, a subset of C
+# Compiler for `C-not`, a subset of C
 This is a compiler for C0, as specified by the [link](https://c0.cs.cmu.edu/) here.
 This compiler also supports a special ADT design, as we call it as `L6`.
 
